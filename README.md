@@ -53,7 +53,8 @@ wget http://tootsuite.encs.concordia.ca/TranCEP/output.tar.gz
 tar -xzf output.tar.gz
 rm -f output.tar.gz
 cd ..
-chmod 755 src/TranCEPTool.R
+cp src/* .
+chmod 755 TranCEPTool.R
 wget http://tootsuite.encs.concordia.ca/singularity-images/bioinformatics-singularity.simg
 singularity -v exec -B .:/TranCEP --pwd /TranCEP bioinformatics-singularity.simg ./TranCEPTool.R -query=testc.fasta -trancepdir=/TranCEP -out=output
 ```
