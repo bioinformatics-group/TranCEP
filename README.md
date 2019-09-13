@@ -40,5 +40,24 @@ The scripts needed to use the tool.
   - `<trancepdir>` is the directory where the base TranCEP files 	are located
  - `MSA_TCS_PAAC` features of each sequence in the test set is  found under [Compositions/MSA_TCS_PAAC.csv](Compositions/MSA_TCS_PAAC.csv)
 
+## A SIMPLIFIED SETUP
+To quickly run this on any environment that supports singularity (and wget):
+```
+git clone https://github.com/bioinformatics-group/TranCEP.git
+cd TranCEP/db
+wget http://tootsuite.encs.concordia.ca/TranCEP/db.tar.gz
+tar -xzf db.tar.gz
+rm -f db.tar.gz
+cd ../output
+wget http://tootsuite.encs.concordia.ca/TranCEP/output.tar.gz
+tar -xzf output.tar.gz
+rm -f output.tar.gz
+cd ..
+chmod 755 src/TranCEPTool.R
+wget http://tootsuite.encs.concordia.ca/singularity-images/bioinformatics-singularity.simg
+singularity -v exec -B .:/TranCEP --pwd /TranCEP bioinformatics-singularity.simg ./TranCEPTool.R -query=testc.fasta -trancepdir=/TranCEP -out=output
+```
+
+The results will be located in `output/TranCEPout.csv`
 
 
