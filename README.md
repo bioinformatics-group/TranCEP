@@ -7,8 +7,7 @@ This tool predicts the substrate class of a given transporter. The class can bel
 ```
  
 Input: transporter proteins sequences in Fasta format
-Output: the substrate class
-
+Output: the substrate class with highest probability, and the probabilities of the other classes.
 
 ## FOLDERS
 There are a number of folders that support the running of TranCEP and its outputs.
