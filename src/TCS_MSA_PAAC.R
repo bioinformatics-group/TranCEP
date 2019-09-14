@@ -88,12 +88,12 @@ FilteredMSA= function(path)
   
   setwd(path)
   
-  tcsScorecmd<-paste0("t_coffee seq.txt -mode psicoffee -blast_server=LOCAL -protein_db ",dbpath,"uniref50-tm.fasta  -output tcs_residue_filter3_fasta,clustalw_aln,tcs_column_filter3_fasta,score_html")
+  tcsScorecmd<-paste0("t_coffee seq.txt -mode psicoffee -blast_server=LOCAL -protein_db ",dbpath,"uniref50-tm.fasta  -output tcs_residue_filter3_fasta,clustalw_aln,tcs_column_filter4_fasta,score_html")
   system(tcsScorecmd)
   system('rm *.prf')
   #Removing columns with 80%gaps or more 
   print("4-Removing columns with 80%gaps or more ")
-  removegapscmd= paste0("t_coffee -other_pg seq_reformat -in seq.tcs_column_filter3_fasta", " -action +rm_gap 80 -output  fasta > filteredSeq.fasta")
+  removegapscmd= paste0("t_coffee -other_pg seq_reformat -in seq.tcs_column_filter4_fasta", " -output  fasta > filteredSeq.fasta")
   system(removegapscmd)
   
 }
