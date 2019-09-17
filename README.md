@@ -55,9 +55,9 @@ cd ..
 cp src/* .
 chmod 755 TranCEPTool.R
 wget http://tootsuite.encs.concordia.ca/singularity-images/bioinformatics-singularity.simg
-singularity -v exec -B .:/TranCEP --pwd /TranCEP bioinformatics-singularity.simg ./TranCEPTool.R -query=testc.fasta -trancepdir=/TranCEP -out=output
+singularity -v exec -B .:/TranCEP --pwd /TranCEP bioinformatics-singularity.simg ./TranCEPTool.R -query=testc.fasta -trancepdir=/TranCEP -out=TranCEPoutput
 ```
 
-The results will be located in `output/TranCEPout.csv`
+The results will be located in `TranCEPoutput/TranCEPout.csv`
 
 
