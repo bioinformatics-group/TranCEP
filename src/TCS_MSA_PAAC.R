@@ -112,7 +112,7 @@ PreparedataforMSAAAC = function(seq, start.pos = 1L, end.pos = nchar(seq),
   }
   
   #2- Do Filtered MSA 
-  if((! file.exists(paste0(SeqDirectory, "filteredSeq.fasta"))) | (file.info(paste0(SeqDirectory, "filteredSeq.fasta"))$size  ==0))
+  if((! file.exists(paste0(SeqDirectory, "filteredSeq.fasta"))) || (file.info(paste0(SeqDirectory, "filteredSeq.fasta"))$size  ==0))
   FilteredMSA(SeqDirectory)  
   }
 }
