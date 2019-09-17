@@ -63,10 +63,12 @@ library(e1071)
 library(caret)
 wd=normalizePath(path.expand(".")) # change the the tool directory
 dbpath=paste0(trancepdir, "/db/")
-compostions=paste0(wd,"/Compositions/")
+compostions=paste0(trancepdir,"/Compositions/")
+intermediateFiles=paste0(trancepdir,"/output/")
+
 dir.create(compostions, showWarnings = TRUE, recursive = FALSE, mode = "0777")
 testname="test"
-dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
+#dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
 substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "protein" ,"sugar" )
 
 
@@ -83,6 +85,7 @@ seqs<- readFASTA(test_fasta)
 probabilities<- attr(svm.predtest,"probabilities")
 colnames(probabilities)<- paste(substates,"probability")
 names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)))
+print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv")
 write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
 
 }
