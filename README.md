@@ -31,6 +31,9 @@ This constitutes large amounts of static data and thus is not included in this r
 ### src
 The scripts needed to use the tool.
 
+### statistics
+Contains the details of the informative postions in different segments of each transporter sequence.
+
 ## HOW TO USE
  - This tool requires that `TM-COFFEE` and `BLAST` be pre-installed
  - Usage: `TranCEP -query=<input> [-trancepdir=<trancepdir>] [-out=<outdir>]`
