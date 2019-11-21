@@ -1,0 +1,18 @@
+ColName,,Formula
+B,Seq Length,
+C,NumTMS,
+D,TotalTMSLth,
+E,Num of important positions,
+X.Seq,Percentage of important positions in the whole sequence,100/1 *  E/A
+F,Num of important positions in TMS,
+X.TMS,Percentage of important positions in TMS,100/1 * F/D
+G,Num of important positions in interior of TMS,
+X.interior,Percentage  of interior TMS important positions in all important positions,100/1 * G/E
+GG,Num positions in exterior of TMS,F-G
+X.exterior,Percentage  of exterior TMS important positions in all important positions,100/1 * GG/E
+FF,Num of important positions in non-TMS,E-F
+X.nonTMS,Percentage of important positions in non TMS,100/1 * (E-F)/(B-D)
+H,Num important positions close to TMS,
+X.close,Percentage  of important positions close to TMS in all important positions,100/1 * H/E
+HH,Num important positions far from TMS,FF - H
+X.far,Percentage  of  important positions far from TMS in all important positions,100/1 * HH/E
