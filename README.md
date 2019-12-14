@@ -37,7 +37,7 @@ Contains the details of the informative postions in different segments of each t
 
 ## HOW TO USE
  - This tool requires that `TM-COFFEE` and `BLAST` be pre-installed
- - Usage: `TranCEP -query=<input> [-trancepdir=<trancepdir>] [-out=<outdir>]`
+ - Usage: `TranCEPTool.R -query=<input> [-trancepdir=<trancepdir>] [-out=<outdir>]`
   - `<input>` is your sequence input file in fasta format
   - `<out>` is the output directory where you want the predicted 	results, formatted as csv
   - `<trancepdir>` is the directory where the base TranCEP files 	are located
