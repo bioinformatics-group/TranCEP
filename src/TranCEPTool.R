@@ -1,12 +1,11 @@
 #! /usr/bin/Rscript
 
 ###################################################
-## Name: TranCEP.R
+## Name: munira/TranCEP.R
 ## input: fasta file containing the unknown/testing protein sequences
-## output: The predicted class of each protein sequence, and the classes probabilities in csv format
+## output: The predicted class of each protein sequenc in the testing file. in csv
 ## Author: Munira Alballa
 ##################################################
-
 args <- commandArgs(trailingOnly=TRUE)
 
 terminate <- FALSE
@@ -54,23 +53,21 @@ if(!exists("query")) {
 test_fasta <- normalizePath(path.expand(query))
 resultspath <- paste0(normalizePath(path.expand(out)),"/")
 
-require(seqinr)
-library("Biostrings")
-library("stringr")
-require(protr)
-library(ISLR)
-library(e1071)
-library(caret)
+suppressMessages(suppressWarnings(require(seqinr)))
+suppressMessages(suppressWarnings(library("Biostrings")))
+suppressMessages(suppressWarnings(library("stringr")))
+suppressMessages(suppressWarnings(require(protr)))
+suppressMessages(suppressWarnings(library(ISLR)))
+suppressMessages(suppressWarnings(library(e1071)))
+suppressMessages(suppressWarnings(library(caret)))
+
 wd=normalizePath(path.expand(".")) # change the the tool directory
 dbpath=paste0(trancepdir, "/db/")
-compostions=paste0(trancepdir,"/Compositions/")
-intermediateFiles=paste0(trancepdir,"/output/")
-
+compostions=paste0(wd,"/Compositions/")
 dir.create(compostions, showWarnings = TRUE, recursive = FALSE, mode = "0777")
 testname="test"
-#dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
+dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
 substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "protein" ,"sugar" )
-
 
 #testing data with unknown substrates
 source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
@@ -78,14 +75,11 @@ load(paste0(trancepdir,"/tranCEP.rda"))
 
 MSA_TCS_PAAC(testname,test_fasta)
 
-testfeatuers = read.csv(paste0(compostions,testname,"_MSA_TCS_PAAC.csv"),sep=",")[,c(-1,-2)]
-svm.predtest<-predict(svm.fit,testfeatuers, probability=T)
+testfeatuers = read.csv(paste0(compostions,testname,"/MSADCcutoff3.csv"),sep=",")[,c(-1,-2)]
+svm.predtest<-predict(svm.fit,testfeatuers)
 substateName<- substates[svm.predtest]
 seqs<- readFASTA(test_fasta)
-probabilities<- attr(svm.predtest,"probabilities")
-colnames(probabilities)<- paste(substates,"probability")
 names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)))
-print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv")
-write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
+write.csv(cbind(names(seqs),Prediction=substateName),paste0(resultspath,"out.csv"))
 
 }
