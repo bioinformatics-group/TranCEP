@@ -125,7 +125,7 @@ MSA_TCS_PAAC<- function(subset,fastafile)
   for(j in c(1:length(seqs)))
   {
     x<- seqs[j]
-    PreparedataforMSAAAC(seq= x,database.path=paste0(dbpath,"/all.fasta"),output.path= dirName)
+    PreparedataforMSAAAC(seq= x,database.path=paste0(dbpath,"all.fasta"),output.path= dirName)
   }
   
   # at this point, we have N fasta files (where N is the number of blast hits) for each sequence in each set.
