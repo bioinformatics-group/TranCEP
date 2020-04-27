@@ -88,12 +88,12 @@ FilteredMSA= function(path)
   
   setwd(path)
   
-  tcsScorecmd<-paste0("t_coffee seq.txt -mode psicoffee -blast_server=LOCAL -protein_db ",dbpath,"all.fasta  -output tcs_residue_filter3_fasta,clustalw_aln,tcs_column_filter3_fasta,score_html")
+  tcsScorecmd<-paste0("t_coffee seq.txt -mode psicoffee -blast_server=LOCAL -protein_db ",dbpath,"uniref50-tm.fasta  -output tcs_residue_filter3_fasta,clustalw_aln,tcs_column_filter4_fasta,score_html")
   system(tcsScorecmd)
   system('rm *.prf')
   #Removing columns with 80%gaps or more 
-  print("4-Removing columns with 80%gaps or more ")
-  removegapscmd= paste0("t_coffee -other_pg seq_reformat -in seq.tcs_column_filter3_fasta", " -action +rm_gap 80 -output  fasta > filteredSeq.fasta")
+ # print("4-Removing columns with 80%gaps or more ")
+  removegapscmd= paste0("t_coffee -other_pg seq_reformat -in seq.tcs_column_filter4_fasta", " -output  fasta > filteredSeq.fasta")
   system(removegapscmd)
   
 }
@@ -102,30 +102,33 @@ PreparedataforMSAAAC = function(seq, start.pos = 1L, end.pos = nchar(seq),
                                 blastp.path = NULL, makeblastdb.path = NULL, 
                                 database.path = NULL, iter = 5, silent = TRUE, 
                                 evalue = 10L, output.path=resultspath) {
-
-  print(output.path)
-  #1- run blastp on datafiles
+    #1- run blastp on datafiles
   seqname=names(seq)
   SeqDirectory=paste0(output.path,names(seq),"/")
-  dir.create(SeqDirectory, showWarnings = FALSE, recursive = FALSE, mode = "0777")
+  if((! dir.exists(SeqDirectory)) ) #first time looking at this sequence
+  {
+  dir.create(SeqDirectory, showWarnings = FALSE, recursive = FALSE, mode = "0777")   
   blastpSeq(seq, start.pos , end.pos ,  blastp.path, makeblastdb.path , database.path , silent ,evalue, SeqDirectory)
-
-  #2- Do Filtered MSA
-  FilteredMSA(SeqDirectory)
+  }
+  
+  #2- Do Filtered MSA 
+  if((! file.exists(paste0(SeqDirectory, "filteredSeq.fasta"))) || (file.info(paste0(SeqDirectory, "filteredSeq.fasta"))$size  ==0))
+  FilteredMSA(SeqDirectory)  
+  }
 }
 
 
 MSA_TCS_PAAC<- function(subset,fastafile)
 {
   # step#1 perpare data 
-  dirName= paste0(resultspath,subset,"/")
+  dirName= paste0(intermediateFiles,"/")
   dir.create(dirName, showWarnings = FALSE, recursive = FALSE, mode = "0777") 
   seqs<- readFASTA(fastafile)
   names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)))
   for(j in c(1:length(seqs)))
   {
     x<- seqs[j]
-    PreparedataforMSAAAC(seq= x,database.path=paste0(dbpath,"all.fasta"),output.path= dirName)
+    PreparedataforMSAAAC(seq= x,database.path=paste0(dbpath,"/all.fasta"),output.path= dirName)
   }
   
   # at this point, we have N fasta files (where N is the number of blast hits) for each sequence in each set.
@@ -135,7 +138,7 @@ MSA_TCS_PAAC<- function(subset,fastafile)
   dfMSADC <- data.frame(matrix(ncol = 400+1, nrow =0)) 
   
   
-  setwd(paste0(resultspath,subset))
+  setwd(paste0(intermediateFiles))
   AAfiles<-  names(seqs)
   
   
@@ -149,9 +152,9 @@ MSA_TCS_PAAC<- function(subset,fastafile)
   {
     subdirName<- paste0(getwd(),"/",AAfiles[i],"/")
     print(subdirName)
-    se<- readFASTA(paste0(subdirName,"seq.tcs_column_filter",3,"_fasta"))
+    se<-  readFASTA(paste0(subdirName, "filteredSeq.fasta"))
     seqlist<- unlist(lapply(se,as.character))
-    seqlist<-sapply(seqlist,gsub,pattern="[^GPAVLIMCFYWHKRQNEDST]",replacement="") # getting rid of gaps? not the smartest thing to do, need more work
+    seqlist<-sapply(seqlist,gsub,pattern="[^GPAVLIMCFYWHKRQNEDST]",replacement="") # getting rid of gaps? needs more work
     
     # print("MSADC for one seq") 
     MSADC<- lapply(seqlist, extractDC)
@@ -165,5 +168,5 @@ MSA_TCS_PAAC<- function(subset,fastafile)
   dfMSADC<- rbind(dfMSADC,ListofSubsetDetailedMSADCStatistics)
   
   
-  write.csv(cbind(UniprotID=AAfiles,dfMSADC), file = paste0(compostions,testname,"/MSADCcutoff3.csv"),row.names = F)
+  write.csv(cbind(UniprotID=AAfiles,dfMSADC), file = paste0(compostions,testname,"_MSA_TCS_PAAC.csv"),row.names = F)
 }
