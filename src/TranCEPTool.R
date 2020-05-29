@@ -97,7 +97,7 @@ if(!terminate) {
     probabilities<- attr(svm.predtest,"probabilities")
     colnames(probabilities)<- paste(substates,"probability")
     names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)))
-    print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv")
+    print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv"))
     write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
 
 }
