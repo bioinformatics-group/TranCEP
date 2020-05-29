@@ -75,6 +75,8 @@ if(!terminate) {
     }else{
         dbpath <- db
     }
+
+    print("\t\t\t*debug* db path is: ",dbpath)
     compostions=paste0(trancepdir,"/Compositions/")
     intermediateFiles=paste0(trancepdir,"/output/")
 
@@ -96,8 +98,7 @@ if(!terminate) {
     seqs<- readFASTA(test_fasta)
     probabilities<- attr(svm.predtest,"probabilities")
     colnames(probabilities)<- paste(substates,"probability")
-    names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)))
+    names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)) )
     print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv"))
     write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
-
 }
