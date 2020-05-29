@@ -76,7 +76,7 @@ if(!terminate) {
         dbpath <- db
     }
 
-    print("\t\t\t*debug* db path is: ",dbpath)
+    print(paste0("\t\t\t*debug* db path is: ",dbpath))
     compostions=paste0(trancepdir,"/Compositions/")
     intermediateFiles=paste0(trancepdir,"/output/")
 
