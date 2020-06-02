@@ -26,6 +26,7 @@ The scripts needed to use the tool.
 	<input> is your sequence input file in fasta format
 	<out> is the output directory where you want the predicted 	results, formatted as csv
 	<trancepdir> is the directory where the base TranCEP files 	are located
+    {db} is the directory where the database is stored
 *MSA_TCS_PAAC features of each sequence in the test set is  found under TranCEP/Compositions/MSA_TCS_PAAC.csv
 
 
