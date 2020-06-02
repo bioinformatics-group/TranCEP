@@ -115,7 +115,7 @@ PreparedataforMSAAAC = function(seq, start.pos = 1L, end.pos = nchar(seq),
   if((! file.exists(paste0(SeqDirectory, "filteredSeq.fasta"))) || (file.info(paste0(SeqDirectory, "filteredSeq.fasta"))$size  ==0))
   FilteredMSA(SeqDirectory)  
   }
-}
+
 
 
 MSA_TCS_PAAC<- function(subset,fastafile)
