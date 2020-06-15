@@ -13,7 +13,7 @@ terminate <- FALSE
 
 out <- "."
 trancepdir <- "."
-db<- "-1"
+db<- "/db/"
 
 for(i in args){
    arg = strsplit(i, "=")[[1]];
@@ -26,10 +26,10 @@ for(i in args){
        out <- arg[2]
      },
      "-trancepdir"={
-       trancepdir <- arg[2]
+       trancepdir <- normalizePath(arg[2])
      },
      "-db"={
-         db <- arg[2]
+         db <- normalizePath(arg[2])
      },
      "-help"={
        cat("TranCEP v1.0 (April 2018)\n")
@@ -67,13 +67,14 @@ if(!terminate) {
     library(ISLR)
     library(e1071)
     library(caret)
+    library(R.utils)
     wd=normalizePath(path.expand(".")) # change the the tool directory
-    
-    # set dbpath variable 
-    if(db=="-1"){
-        dbpath <- paste0(trancepdir, "/db/")
-    }else{
+   
+
+    if (isAbsolutePath(db)){
         dbpath <- db
+    }else{
+        dbpath <- paste0(TooTSCdir, db)
     }
 
     print(paste0("\t\t\t*debug* db path is: ",dbpath))
