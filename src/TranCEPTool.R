@@ -13,7 +13,7 @@ terminate <- FALSE
 
 out <- "."
 trancepdir <- "."
-db<- "/db/"
+db<- "./db/"
 
 for(i in args){
    arg = strsplit(i, "=")[[1]];
@@ -77,7 +77,6 @@ if(!terminate) {
         dbpath <- paste0(TooTSCdir, db)
     }
 
-    print(paste0("\t\t\t*debug* db path is: ",dbpath))
     compostions=paste0(trancepdir,"/Compositions/")
     intermediateFiles=paste0(trancepdir,"/output/")
 
