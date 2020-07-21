@@ -47,6 +47,7 @@ blastpSeq<- function(seq, start.pos = 1L, end.pos = nchar(seq),
     }
   }
   # Run Blastp
+  
   cmdblastp = paste(
     paste0(shQuote(blastp.path),
            ' -comp_based_stats 1 -db ', shQuote(database.path),
