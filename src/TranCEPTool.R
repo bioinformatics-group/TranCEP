@@ -87,7 +87,7 @@ if(!terminate) {
 
 
 #testing data with unknown substrates
-    source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
+    source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
     load(paste0(trancepdir,"/tranCEP.rda"))
 
     MSA_TCS_PAAC(testname,test_fasta)
