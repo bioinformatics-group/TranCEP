@@ -6,6 +6,7 @@
 ## output: The predicted class of each protein sequence, and the classes probabilities in csv format
 ## Author: Munira Alballa
 ##################################################
+install.packages("argparse")
 library(argparse)
 
 trancepdir <- "."
