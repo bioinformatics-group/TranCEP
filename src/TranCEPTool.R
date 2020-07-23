@@ -6,7 +6,6 @@
 ## output: The predicted class of each protein sequence, and the classes probabilities in csv format
 ## Author: Munira Alballa
 ##################################################
-install.packages("argparse")
 library(argparse)
 
 trancepdir <- "."
@@ -26,8 +25,6 @@ parser$add_argument("-trancepdir", default='.',
                     metavar="DIRECTORY")
 parser$add_argument("-db", default="./db/",
                     help="The directory where the database is located. Default [%(default)].", metavar="DIRECTORY")
-
-
 
 args <- parser$parse_args()
 
@@ -109,7 +106,7 @@ if (isAbsolutePath(db)){
 compostions=paste0(trancepdir,"/Compositions/")
 intermediateFiles=paste0(trancepdir,"/output/")
 
-dir.create(compostions, showWarnings = TRUE, recursive = FALSE, mode = "0777")
+dir.create(compostions, showWarnings = FALSE, recursive = FALSE, mode = "0777")
 testname="test"
 #dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
 substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "protein" ,"sugar" )
