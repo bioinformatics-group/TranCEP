@@ -101,7 +101,7 @@ wd=normalizePath(path.expand(".")) # change the the tool directory
 if (isAbsolutePath(db)){
     dbpath <- db
 }else{
-    dbpath <- paste0(TooTSCdir, db)
+    dbpath <- paste0(trancepdir, db)
 }
 
 compostions=paste0(trancepdir,"/Compositions/")
