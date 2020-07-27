@@ -82,7 +82,6 @@ db <- normalizePath(args$db)
 trancepdir <- normalizePath(args$trancepdir)
 
 # get directory of the script currently running
-script.dir <- dirname(sys.frame(1)$ofile)
 
 
 test_fasta <- normalizePath(path.expand(query))
@@ -116,11 +115,12 @@ substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "prote
 
 #testing data with unknown substrates
 
+# try in trancepdir/src/ if the script is not found in trancepdir 
 if(file.exists(paste0(trancepdir,"/TCS_MSA_PAAC.R"))){
     source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
 }
 else{
-    source(paste0(script.dir,"/TCS_MSA_PAAC.R"))
+    source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
 }
 
 load(paste0(trancepdir,"/tranCEP.rda"))
