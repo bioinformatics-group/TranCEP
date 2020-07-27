@@ -118,8 +118,7 @@ substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "prote
 # try in trancepdir/src/ if the script is not found in trancepdir 
 if(file.exists(paste0(trancepdir,"/TCS_MSA_PAAC.R"))){
     source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
-}
-else{
+}else{
     source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
 }
 
