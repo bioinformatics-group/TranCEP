@@ -16,9 +16,6 @@ library(e1071)
 library(caret)
 library(R.utils)
 
-trancepdir <- "."
-db<- "./db/"
-
 parser <- ArgumentParser()
 
 # positional/ mandatory argument
