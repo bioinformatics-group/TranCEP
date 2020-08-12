@@ -74,18 +74,18 @@ if(file.exists(paste0(trancepdir,"/TCS_MSA_PAAC.R"))){
 }else{
     source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
 }
-
+# load date
 load(paste0(trancepdir,"/tranCEP.rda"))
 
 MSA_TCS_PAAC(testname,test_fasta)
 
 testfeatuers = read.csv(paste0(compostions,testname,"_MSA_TCS_PAAC.csv"),sep=",")[,c(-1,-2)]
-svm.predtest<-predict(svm.fit,testfeatuers, probability=T)
-substateName<- substates[svm.predtest]
-seqs<- readFASTA(test_fasta)
-probabilities<- attr(svm.predtest,"probabilities")
-colnames(probabilities)<- paste(substates,"probability")
-names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)) )
+svm.predtest <- predict(svm.fit,testfeatuers, probability=T)
+substateName <- substates[svm.predtest]
+seqs <- readFASTA(test_fasta)
+probabilities <- attr(svm.predtest,"probabilities")
+colnames(probabilities) <- paste(substates,"probability")
+names(seqs) <- sub("\\|.*","",sub(".+?\\|","", names(seqs)) )
 print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv"))
 
 write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
