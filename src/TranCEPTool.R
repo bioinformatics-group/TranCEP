@@ -16,8 +16,16 @@ library(e1071)
 library(caret)
 library(R.utils)
 
-parser <- ArgumentParser()
+# load TCS_MSA_PAAC.R
+# try in trancepdir/src/ if the script is not found in trancepdir 
+if(file.exists(paste0(trancepdir,"/TCS_MSA_PAAC.R"))){
+    source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
+}else{
+    source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
+}
 
+
+parser <- ArgumentParser()
 # positional/ mandatory argument
 parser$add_argument("-query",default="",
                     help="The sequence input file in fasta format.",
@@ -41,19 +49,13 @@ db <- normalizePath(args$db)
 trancepdir <- normalizePath(args$trancepdir)
 
 
-if (isAbsolutePath(db)){
-    dbpath <- db
-}else{
-    dbpath <- paste0(trancepdir, db)
-}
-
 test_fasta <- normalizePath(path.expand(query))
 resultspath <- paste0(normalizePath(path.expand(out)),"/")
 
 
 wd=normalizePath(path.expand(".")) # working directory
 
-# create necessary directory
+# create necessary compositions directory
 compostions=paste0(trancepdir,"/Compositions/")
 intermediateFiles=paste0(trancepdir,"/output/")
 dir.create(compostions, showWarnings = FALSE, recursive = FALSE, mode = "0777")
@@ -64,16 +66,10 @@ substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "prote
 
 
 #testing data with unknown substrates
-
-# try in trancepdir/src/ if the script is not found in trancepdir 
-if(file.exists(paste0(trancepdir,"/TCS_MSA_PAAC.R"))){
-    source(paste0(trancepdir,"/TCS_MSA_PAAC.R"))
-}else{
-    source(paste0(trancepdir,"/src/TCS_MSA_PAAC.R"))
-}
-# load date
+# load data
 load(paste0(trancepdir,"/tranCEP.rda"))
 
+# run MSA_TCS_PAAC
 MSA_TCS_PAAC(testname,test_fasta)
 
 testfeatuers = read.csv(paste0(compostions,testname,"_MSA_TCS_PAAC.csv"),sep=",")[,c(-1,-2)]
@@ -83,6 +79,7 @@ seqs <- readFASTA(test_fasta)
 probabilities <- attr(svm.predtest,"probabilities")
 colnames(probabilities) <- paste(substates,"probability")
 names(seqs) <- sub("\\|.*","",sub(".+?\\|","", names(seqs)) )
+
 print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv"))
 
 write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
