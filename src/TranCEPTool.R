@@ -7,6 +7,14 @@
 ## Author: Munira Alballa
 ##################################################
 library(argparse)
+require(seqinr)
+library("Biostrings")
+library("stringr")
+require(protr)
+library(ISLR)
+library(e1071)
+library(caret)
+library(R.utils)
 
 trancepdir <- "."
 db<- "./db/"
@@ -25,53 +33,7 @@ parser$add_argument("-trancepdir", default='.',
                     metavar="DIRECTORY")
 parser$add_argument("-db", default="./db/",
                     help="The directory where the database is located. Default [%(default)].", metavar="DIRECTORY")
-
-args <- parser$parse_args()
-
-# args <- commandArgs(trailingOnly=TRUE)
-
-# terminate <- FALSE
-
-# out <- "."
-# trancepdir <- "."
-# db<- "./db/"
-
-# for(i in args){
-#    arg = strsplit(i, "=")[[1]];
-
-#    switch(arg[1],
-#      "-query"={
-#        query <- arg[2]
-#      },
-#      "-out"={
-#        out <- arg[2]
-#      },
-#      "-trancepdir"={
-#        trancepdir <- normalizePath(arg[2])
-#      },
-#      "-db"={
-#          db <- normalizePath(arg[2])
-#      },
-#      "-help"={
-#        cat("TranCEP v1.0 (April 2018)\n")
-#        cat("https://doi.org/10.1101/293159\n")
-#        cat("\n")
-#        cat("Usage: TranCEP -query=<input> [-trancepdir=<trancepdir>] [-out=<outdir>] [-db=<database directory>]\n")
-#        cat("\n")
-#        cat("\t<input> is your sequence input file in fasta format\n")
-#        cat("\t<out> is the output directory where you want the predicted results, formatted as csv\n")
-#        cat("\t\t<out> defaults to '",out,"'\n")
-#        cat("\t<trancepdir> is the directory where the base TranCEP files are located")
-#        cat("\t\t<trancepdir> defaults to '",trancepdir,"'\n")
-#        cat("\t\t <db> is the directory where the database is located.")
-#        cat("\t\t <db> defaults to ", paste0(trancepdir, "/db/"),"\n")
-#        cat("\n")
-#        terminate <- TRUE
-#        break
-#      }
-#    )
-# }
-
+args <- parser$parse_args() #start the parser
 if(args$query == ""){
   stop("Please input a query file (using -query=path/to/fasta_file).")
 }
@@ -81,22 +43,6 @@ out <- args$out
 db <- normalizePath(args$db)
 trancepdir <- normalizePath(args$trancepdir)
 
-# get directory of the script currently running
-
-
-test_fasta <- normalizePath(path.expand(query))
-resultspath <- paste0(normalizePath(path.expand(out)),"/")
-
-require(seqinr)
-library("Biostrings")
-library("stringr")
-require(protr)
-library(ISLR)
-library(e1071)
-library(caret)
-library(R.utils)
-wd=normalizePath(path.expand(".")) # change the the tool directory
-
 
 if (isAbsolutePath(db)){
     dbpath <- db
@@ -104,11 +50,18 @@ if (isAbsolutePath(db)){
     dbpath <- paste0(trancepdir, db)
 }
 
+test_fasta <- normalizePath(path.expand(query))
+resultspath <- paste0(normalizePath(path.expand(out)),"/")
+
+
+wd=normalizePath(path.expand(".")) # working directory
+
+# create necessary directory
 compostions=paste0(trancepdir,"/Compositions/")
 intermediateFiles=paste0(trancepdir,"/output/")
-
 dir.create(compostions, showWarnings = FALSE, recursive = FALSE, mode = "0777")
 testname="test"
+
 #dir.create(paste0(compostions,testname,"/"), showWarnings = TRUE, recursive = FALSE, mode = "0777") # intermediate files go here
 substates<- c("amino",    "anion" ,   "cation"  , "electron", "other" ,   "protein" ,"sugar" )
 
@@ -134,5 +87,6 @@ probabilities<- attr(svm.predtest,"probabilities")
 colnames(probabilities)<- paste(substates,"probability")
 names(seqs)<- sub("\\|.*","",sub(".+?\\|","", names(seqs)) )
 print(paste0( "TranCEP output is found at: ", resultspath, "TranCEPout.csv"))
+
 write.csv(cbind(names(seqs),Prediction=substateName, Probabilities=probabilities ),paste0(resultspath,"TranCEPout.csv"))
 
